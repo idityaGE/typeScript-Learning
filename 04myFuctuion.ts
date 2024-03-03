@@ -49,7 +49,7 @@ function consoleError(Error: string): void {//void is used when we don't want to
 }//typescript will automatically decide the type of function as void but its a good practice to define the return type of the function as void
 
 function throwError(Error: string): never {//never is used when the function never returns anything
-    throw new Error(Error);
+    throw Error //throwing an error;
 }
 
 
