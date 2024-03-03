@@ -202,3 +202,25 @@ console.log(myUsers2); // [ { name: 'John', age: 30 }, { name: 'Jane', age: 25 }
 type MixedArray2 = readonly (string | number)[];
 let myMixedArray2: MixedArray2 = ['John', 25];
 console.log(myMixedArray2); // ['John', 25]
+
+
+
+
+
+//interface for array
+const myArray1: Array<string> = ['John', 'Doe'];
+console.log(myArray1); // ['John', 'Doe']
+
+
+type arrtype = Array<number>;
+let myArray2: arrtype = [1, 2, 3];
+
+type arrtype1 = Array<string | number>;
+let myArray3: arrtype1 = ['John', 25];
+
+
+//interface for readonly array
+const hobbies1: ReadonlyArray<string> = ['Sports', 'Cooking'];
+console.log(hobbies1); // [ 'Sports', 'Cooking' ]
+// hobbies1.push('Reading'); // Error: Property 'push' does not exist on type 'readonly string[]'
+
