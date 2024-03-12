@@ -1,0 +1,130 @@
+//what is narrowing in typescript?
+// In TypeScript, narrowing is the process of reducing the range of values that a variable can hold.
+
+
+//Narrowing with typeof
+let x = Math.random() < 0.5 ? 10 : "hello world!";
+if (typeof x === "number") {
+    console.log(x + 10); //x is number here
+} else {
+    console.log(x + "hello world!"); //x is string here
+}
+
+
+//Narrowing with in
+let obj = Math.random() < 0.5 ? { name: "Aditya" } : { age: 21 };
+if ("name" in obj) {
+    console.log(obj.name); //obj is {name: "Aditya"} here
+} else {
+    console.log(obj.age); //obj is {age: 21} here
+}
+
+
+//Narrowing with switch
+type Shape = Circle | Square;
+interface Circle {
+    kind: "circle";
+    radius: number;
+}
+interface Square {
+    kind: "square";
+    sideLength: number;
+}
+let shape: Shape = Math.random() < 0.5 ? { kind: "circle", radius: 100 } : { kind: "square", sideLength: 50 };
+switch (shape.kind) {
+    case "circle":
+        console.log(Math.PI * shape.radius ** 2); //shape is Circle here
+        break;
+    case "square":
+        console.log(shape.sideLength ** 2); //shape is Square here
+        break;
+}
+
+//Narrowing with ternary operator
+let value = Math.random() < 0.5 ? 10 : "hello world!";
+let result = typeof value === "number" ? value + 10 : value + "hello world!";
+console.log(result); //value is number here
+
+
+//Narrowing with in operator
+interface User {
+    name: string;
+    email: string;
+}
+interface Admin {
+    name: string;
+    email: string;
+    isAdmin: boolean;
+}
+let isAdminOrNot = (account: User | Admin): boolean => {
+    return "isAdmin" in account;
+}
+isAdminOrNot({ name: "Aditya", email: "g@g.com" }); //false
+isAdminOrNot({ name: "Aditya", email: "m@m.com", isAdmin: true }); //true
+//Here, isAdminOrNot is a user-defined type guard. It checks if the isAdmin property exists in the account object. If it does, it returns true, indicating that the account is an Admin. Otherwise, it returns false, indicating that the account is a User.
+
+
+//Narrowing with instanceof operator
+//instanceof is used to check if an object is an instance of a class. It can also be used to narrow the type of an object in TypeScript.
+class Dog {
+    woof() {
+        console.log("woof");
+    }
+}
+class Cat {
+    meow() {
+        console.log("meow");
+    }
+}
+let isDogOrNot = (animal: Dog | Cat): void => {
+    if (animal instanceof Dog) {
+        animal.woof();
+    } else {
+        animal.meow();
+    }
+}
+isDogOrNot(new Dog()); //woof
+isDogOrNot(new Cat()); //meow
+//Here, isDogOrNot is a user-defined type guard. It checks if the animal object is an instance of the Dog class. If it is, it calls the woof method. Otherwise, it calls the meow method.
+
+
+//Narrowing with user-defined type guards
+function isDog(pet: Dog | Cat): pet is Dog { //pet is Dog is a type predicate //type predicate is a function that returns a boolean
+    return (pet as Dog).woof !== undefined;
+}
+let animal = Math.random() < 0.5 ? new Dog() : new Cat();
+if (isDog(animal)) {
+    animal.woof(); //animal is Dog here
+} else {
+    animal.meow(); //animal is Cat here
+}
+//Here, isDog is a user-defined type guard. It checks if the pet object has a woof method. If it does, it returns true, indicating that the pet is a Dog. Otherwise, it returns false, indicating that the pet is a Cat.
+//type predicate serves as a type guard that narrows the type of the pet object to Dog.
+
+
+//Narrowing with discriminated unions
+//A discriminated union is a union of object types that have a common, singleton property — the discriminant. A discriminant is a property that is used to narrow the type of the object in a union.
+interface Circle2 {
+    kind: "circle";
+    radius: number;
+}
+interface Square2 {
+    kind: "square";
+    sideLength: number;
+}
+type Shape2 = Circle2 | Square2;
+
+function getTureShape(shape: Shape2): number {
+    switch (shape.kind) {
+        case "circle":
+            return Math.PI * shape.radius ** 2;
+        case "square":
+            return shape.sideLength ** 2;
+        default:
+            const _exhaustiveCheck: never = shape;//this is a exhaustive check to check if we have covered all the cases
+            return _exhaustiveCheck;
+    }
+}
+
+
+export { };
